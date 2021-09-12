@@ -16,20 +16,15 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-
+        //gets the input in x and y position    
         float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
 
 
         //Reset move Delta
-        moveDelta = new Vector3(x,y,0);
+        moveDelta = new Vector3(x,y,0f);
 
-        //swap sprite direction
-        /*if (moveDelta.x > 0)
-        /    transform.localScale = Vector3.one;
-        else if (moveDelta.x < 0)
-            transform.localScale = new Vector3(-1, 1, 1);*/
-
+        //logic for determining hitboxes and whether a character and move in a tile
         hit = Physics2D.BoxCast(transform.position, boxCollider.size, 0, new Vector2(0,moveDelta.y), Mathf.Abs(moveDelta.y *Time.deltaTime), LayerMask.GetMask("Actor", "Blocking"));
         if(hit.collider == null)
         {
@@ -41,7 +36,10 @@ public class Player : MonoBehaviour
             transform.Translate(moveDelta.x * Time.deltaTime, 0, 0);
         }
 
-        animator.SetFloat("Horizontal", Input.GetAxisRaw("Horizontal"));
+        //sets the state of the animator and determins which animation to play
+        animator.SetFloat("Horizontal", x);
+        animator.SetFloat("Vertical", y);
+        animator.SetFloat("Magnitude", moveDelta.magnitude);
 
     }
 }
