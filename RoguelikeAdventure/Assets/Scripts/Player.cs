@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     private Vector3 moveDelta;
     private RaycastHit2D hit;
     public Animator animator;
+    public GameObject Crosshair;
 
     private void Start()
     {
@@ -37,9 +38,24 @@ public class Player : MonoBehaviour
         }
 
         //sets the state of the animator and determins which animation to play
-        animator.SetFloat("Horizontal", x);
-        animator.SetFloat("Vertical", y);
+        animator.SetFloat("Horizontal", moveDelta.x);
+        animator.SetFloat("Vertical", moveDelta.y);
         animator.SetFloat("Magnitude", moveDelta.magnitude);
+        MoveCrosshair();
 
+    }
+
+    private void MoveCrosshair() 
+    {
+        Vector3 aim = new Vector3(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"), 0f);
+
+
+        if(aim.magnitude > 0.0f)
+        {
+            aim.Normalize();
+            aim *= 0.4f;
+            Crosshair.transform.localPosition = aim;
+            Crosshair.SetActive(true);
+        }
     }
 }
